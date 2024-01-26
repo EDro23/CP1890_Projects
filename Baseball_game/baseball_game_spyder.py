@@ -1,10 +1,18 @@
-import dataclasses
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Jan 26 10:42:42 2024
+
+@author: kaileyslaney
+"""
+from dataclass import dataclasses
 import string
 from datetime import datetime
 
 
 
-@dataclasses
+@dataclass
+
 class baseballPlayer:
     __firstname: string.ascii_uppercase
     __lastname:  string.ascii_uppercase

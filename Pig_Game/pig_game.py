@@ -2,8 +2,11 @@ from pig_classes import Game
 
 
 def pig_game():
+    print(25 * "=+")
     print("Let's Play PIG!!")
-    print("Here are the rules!"
+    print(25*"=+")
+    print()
+    print("Here are the rules!\n"
           "\n* See how many turns it takes you to get to 20."
           "\n* Turn ends when you hold or roll a 1."
           "\n* If you roll a 1, you lose all your points for that turn."
@@ -21,5 +24,5 @@ def main():
         print()
         print("Thanks for playing")
 
-        if __name__ == '__main__':
-            main()
+if __name__ == '__main__':
+    main()

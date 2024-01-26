@@ -2,7 +2,7 @@ import random
 from dataclasses import dataclass
 
 
-@Dataclass
+@dataclass
 class Die:
     __value: int = 1
 
@@ -36,8 +36,8 @@ class Game:
                 self.roll_die()
             if choice.lower() == 'h':
                 self.hold_turn()
-            else:
-                print('Invalid input. Check the options and try again.')
+        else:
+            print('Invalid input. Check the options and try again.')
 
     def roll_die(self):
         self.__die.roll()

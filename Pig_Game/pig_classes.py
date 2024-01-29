@@ -24,9 +24,9 @@ class Game:
 
     def play(self):
         while not self.__isGameOver:
-            self.takeTurn()
+            self.__takeTurn()
 
-    def takeTurn(self):
+    def takeTurn(self):display
         print('TURN', self.__turn)
         self.__scorethisturn = 0
         self.__isTurnOver = False

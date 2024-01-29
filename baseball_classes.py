@@ -1,11 +1,17 @@
-from datetime import datetime
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Jan 26 10:44:11 2024
 
-from baseballClasses import baseballPlayer
+@author: kaileyslaney
+"""
+
+
 
 def divider():
     print(50 * "=")
 def menutop(gamedayinput=None):
-    print("\t\t\t\tBaseball Team Manager")
+    print("\t\t\t\tBaseball Team Manager").
     print()
     print("CURRENT DATE:", datetime.datetime.now())
     print(f"GAME DATE: {gamedayinput}")
@@ -26,7 +32,7 @@ def positions():
     print("POSITIONS")
     print("C, 1B, 2B, 3B, SS, LF, CF, RF, P")
 
-def main(self=None):
+def main():
     divider()
     menutop()
     menu_options()
@@ -38,4 +44,3 @@ def main(self=None):
 
 if __name__ == "__main__":
     main()
-

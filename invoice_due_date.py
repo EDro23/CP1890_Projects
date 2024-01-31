@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 def menu_top():
@@ -16,17 +16,19 @@ def main():
 
             print("Invoice Date:", inv_date.strftime("%B %d, %Y"))
 
-            due_date_str = input("Enter the Due date (MM-DD-YY): ")
-            due_date = datetime.strptime(due_date_str, "%m-%d-%y")
+            # Hardcoding the due date to 30 days from the invoice date
+            due_date = inv_date + timedelta(days=30)
             print("Due Date:", due_date.strftime("%B %d, %Y"))
+
 
             current_date = datetime.now()
             print("Current Date:", current_date.strftime("%B %d, %Y"))
+            time_til_duedate = current_date - due_date
             print()
-            days_between = current_date - due_date
-            print(f"This invoice is {days_between.days} day(s) overdue.")
+            print(f"The invoice is due {time_til_duedate.days} days ago.")
+            print()
 
-            contin = input("\nContinue? (Y/N): ")
+            contin = input("Continue? (Y/N): ")
 
             if contin.lower() != "y":
                 break

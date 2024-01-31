@@ -2,12 +2,26 @@ from baseballClasses import BaseballPlayer
 from datetime import datetime
 
 POSITIONS = ('C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'P')
+game_date_str = str(datetime.now())
 
 
-def dateandtime():
-    print("CURRENT DATE: ", datetime.now().strftime("%y/%m/%d"))
-    gamedate = input("GAME DATE: \t")
-    # days_until_game = datetime.strftime(gamedate, "%y/%m/%d").date() - datetime.now().strftime("%y/%m/%d")
+def date_and_time(game_date_str):
+    current_date = datetime.now().strftime("%y/%m/%d")
+    print(f"DATE TODAY: {current_date}")
+    game_date_str = input("Please enter your next game date (YY/MM/DD): ").strip()
+
+    try:
+        game_date = datetime.strptime(game_date_str, "%y/%m/%d")
+        days_until = days_until_game(game_date)
+        print(f"Days until the game: {days_until} days")
+    except ValueError:
+        print("Invalid date format. Please enter the date in the format YY/MM/DD.")
+
+
+def days_until_game(game_date):
+    current_date = datetime.now()
+    delta = game_date - current_date
+    return delta.days
 
 
 def add_player(players):
@@ -151,7 +165,7 @@ def display_seperator():
 
 
 def display_title():
-    print('\t\t\t\t Baseball Team Manager')
+    print('\t\t\t\t\t\t Baseball Team Manager')
 
 
 def display_options():
@@ -173,7 +187,7 @@ def display_positions(POSITIONS):
 def main():
     display_seperator()
     display_title()
-    dateandtime()
+    date_and_time(game_date_str)
     display_options()
     display_positions(POSITIONS)
     display_seperator()

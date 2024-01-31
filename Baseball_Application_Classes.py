@@ -22,7 +22,7 @@ def date_and_time():
             return
 
     days_until = days_until_game(game_date)
-    print(f"Days until the game: {days_until} days")
+    print(f"Days until the game: {days_until} days, get ready!")
 
 def days_until_game(game_date):
     current_date = datetime.now()
@@ -165,6 +165,40 @@ def edit_player_position(players, POSITIONS):
         except Exception:
             print('Invalid, please try again.')
 
+def edit_player_at_bats(players):
+    while True:
+        try:
+            if not players:
+                print('Player not in lineup.\nPlease try again.')
+            else:
+                choice = input("Who would you like to edit the stats for? (Enter first name): ").strip()
+                matching_players = [player for player in players if player.first_name == choice.title()]
+
+                if not matching_players:
+                    print('This player does not exist. Try again.')
+                else:
+                    chosen_player = matching_players[0]
+                    print(f'Changing "at bats" for {chosen_player.first_name}.')
+                    print(f"Current at bats for {chosen_player.first_name} is {chosen_player.at_bats}")
+
+                    while True:
+                        try:
+                            change_at_bats = int(input("Updated at bats: "))
+                            if not (0 <= change_at_bats <= 500):
+                                print('Invalid input. Must be between 0 and 500. Please try again.')
+                            elif change_at_bats < chosen_player.hits:
+                                print('At bats must be greater than or equal to the players hits.')
+                                print(f'This player has {chosen_player.hits} hits. Please try again.')
+                            else:
+                                chosen_player.at_bats = change_at_bats
+                                print(f"At bats for {chosen_player.first_name} updated to {chosen_player.at_bats}.")
+                                break
+                        except ValueError:
+                            print('Invalid input. Please enter a valid integer.')
+            break  # Exit the loop after successfully editing a player's at bats
+        except AttributeError:
+            print('Invalid input. Please try again.')
+
 
 def display_seperator():
     print('-' * 80)
@@ -216,6 +250,8 @@ def main():
             move_player(players)
         elif choice == 5:
             edit_player_position(players,POSITIONS)
+        elif choice == 6:
+            edit_player_at_bats(players)
         elif choice == 7:
             print("Bye!")
             break

@@ -5,18 +5,24 @@ POSITIONS = ('C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'P')
 game_date_str = str(datetime.now())
 
 
-def date_and_time(game_date_str):
-    current_date = datetime.now().strftime("%y/%m/%d")
+def date_and_time():
+    current_date = datetime.now().strftime("%Y/%m/%d")
     print(f"DATE TODAY: {current_date}")
-    game_date_str = input("Please enter your next game date (YY/MM/DD): ").strip()
+
+    game_date_str = input("Please enter your next game date (YY/MM/DD or YYYY/MM/DD): ").strip()
 
     try:
         game_date = datetime.strptime(game_date_str, "%y/%m/%d")
-        days_until = days_until_game(game_date)
-        print(f"Days until the game: {days_until} days")
     except ValueError:
-        print("Invalid date format. Please enter the date in the format YY/MM/DD.")
+        try:
+            # Try parsing with a different format if the first attempt fails
+            game_date = datetime.strptime(game_date_str, "%Y/%m/%d")
+        except ValueError:
+            print("Invalid date format. Please enter the date in the format YY/MM/DD or YYYY/MM/DD.")
+            return
 
+    days_until = days_until_game(game_date)
+    print(f"Days until the game: {days_until} days")
 
 def days_until_game(game_date):
     current_date = datetime.now()
@@ -187,7 +193,7 @@ def display_positions(POSITIONS):
 def main():
     display_seperator()
     display_title()
-    date_and_time(game_date_str)
+    date_and_time()
     display_options()
     display_positions(POSITIONS)
     display_seperator()

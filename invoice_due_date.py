@@ -14,6 +14,7 @@ def main():
             inv_date_str = input("Enter the Invoice date (MM-DD-YY): ")
             inv_date = datetime.strptime(inv_date_str, "%m-%d-%y")
 
+            print()
             print("Invoice Date:", inv_date.strftime("%B %d, %Y"))
 
             # Hardcoding the due date to 30 days from the invoice date
@@ -25,12 +26,17 @@ def main():
             print("Current Date:", current_date.strftime("%B %d, %Y"))
             time_til_duedate = current_date - due_date
             print()
-            print(f"The invoice is due {time_til_duedate.days} days ago.")
+            if time_til_duedate.days > 0:
+                print(f"This invoice is {time_til_duedate.days} day(s) overdue.")
+            else:
+                days_due = time_til_duedate * -1
+                print(f"This invoice is is due in {days_due.days} day(s)")
             print()
 
             contin = input("Continue? (Y/N): ")
 
             if contin.lower() != "y":
+                print("Bye!")
                 break
     except ValueError:
         print("Invalid date format. Please enter the date in MM-DD-YY format.")

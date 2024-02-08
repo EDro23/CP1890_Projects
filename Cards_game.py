@@ -1,7 +1,9 @@
 from Cards_classes import DeckOfCards
 
-def Game_top():
+
+def game_top():
     print("Card Dealer\n\nI have shuffled a deck of 52 cards.\n")
+
 
 def cards_left(deck):
     print()
@@ -9,10 +11,11 @@ def cards_left(deck):
     print()
     print("Good luck!")
 
+
 def main():
     deck = DeckOfCards()
     deck.shuffle_deck()
-    Game_top()
+    game_top()
     user_choice = int(input("How many cards would you like to draw?: "))
 
     if deck.deck:
@@ -27,6 +30,7 @@ def main():
             print("No cards left in the deck.")
     else:
         print("No cards in the deck.")
+
 
 if __name__ == "__main__":
     main()

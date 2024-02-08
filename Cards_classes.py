@@ -3,10 +3,12 @@ from random import shuffle
 from typing import List
 import itertools
 
+
 @dataclass
 class Card:
     suit: str
     rank: str
+
 
 @dataclass
 class DeckOfCards:

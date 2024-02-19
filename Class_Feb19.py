@@ -1,26 +1,54 @@
 from dataclasses import dataclass
 
 @dataclass
-class Theater:
-    location: str = ""
-    capacity: int = 0
-    ticketPrice: float = 0.0
+class Product:
+    name: str = ""
+    price: float = 0.0
+    quantity: int = 0
+    discount: float = 0.0
+    description: str = ""
 
-    def getLocation(self) -> str:
-        return self.location
+    def getName(self) -> str:
+        return self.name
 
-    def getCapacity(self) -> int:
-        return self.capacity
+    def getPrice(self) -> float:
+        return self.price
+
+    def getQuantity(self) -> int:
+        return self.quantity
+
+    def getDiscount(self) -> float:
+        return self.price * self.discount / 100
 
     def getDescription(self) -> str:
-        return f"{self.location} with a capactiy of {self.capacity}, Ticket cost is ${self.ticketPrice}"
-
-    def getTicketPrice(self) -> float:
-        return self.ticketPrice
-
+        print("PRODUCT DATA")
+        return f"Name: {self.getName()}\nPrice: {self.getPrice()}\nQuantity: {self.getQuantity()}\nDiscount: {self.getDiscount()}"
 
 @dataclass
-class Movie:
+class Item(Product):
+    name: str = ""
+
+    def getName(self) -> str:
+        return self.name
+
+    def getPrice(self) -> int:
+        return int(self.price)
+
+    def getQuantity(self) -> int:
+        return self.quantity
+
+    def getDiscount(self) -> float:
+        return self.price * self.discount / 100
+
+    def getDescription(self) -> str:
+        return (f"Name: {self.getName()}\n"
+                f"Discount price: {self.getDiscount()}\n"
+                f"Quantity: {self.getQuantity()}\n"
+                f"Price: {self.getPrice()}\n"
+                f"Discount: {self.getDiscount()}")
+
+@dataclass
+class Movies(Product):
     name: str = ""
     year: int = 0
 
@@ -31,10 +59,14 @@ class Movie:
         return self.year
 
     def getDescription(self) -> str:
-        return f"{self.name}, Released in {self.year}"
+        return (f"Name: {self.getName()}\n"
+                f"Discount price: {self.getDiscount()}")
 
-theater1 = Theater("Scotiabank Theater", 200, 7)
-movie1 = Movie("Venom", 2013)
+item1 = Item("Stanley 13 Ounce Wood Hammer", 10, 2, 5, "Hammer")
+movie1 = Movies("The Holy Grail", 20, 1, 5, "DVD", 1975)
 
-print(theater1.getDescription())
+print("PRODUCT DATA")
+print(item1.getDescription())
+print()
+print("PRODUCT DATA")
 print(movie1.getDescription())

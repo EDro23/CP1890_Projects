@@ -20,9 +20,12 @@ class Product:
     def getDiscount(self) -> float:
         return self.price * self.discount / 100
 
+    def getTotalPrice(self) -> float:
+        return self.price - self.getDiscount()
+
     def getDescription(self) -> str:
         print("PRODUCT DATA")
-        return f"Name: {self.getName()}\nPrice: {self.getPrice()}\nQuantity: {self.getQuantity()}\nDiscount: {self.getDiscount()}"
+        return f"Name: {self.getName()}\nPrice: {self.getPrice()}\nQuantity: {self.getQuantity()}\nDiscount: {self.getDiscount()}\nTotal: {self.getTotalPrice()}"
 
 @dataclass
 class Item(Product):
@@ -45,7 +48,8 @@ class Item(Product):
                 f"Discount price: {self.getDiscount()}\n"
                 f"Quantity: {self.getQuantity()}\n"
                 f"Price: {self.getPrice()}\n"
-                f"Discount: {self.getDiscount()}")
+                f"Discount: {self.getDiscount()}\n"
+                f"Total: {self.getTotalPrice()}")
 
 @dataclass
 class Movies(Product):

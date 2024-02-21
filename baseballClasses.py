@@ -21,6 +21,9 @@ class BaseballPlayer:
         except ZeroDivisionError:
             return 0.0
 
+class Lineup(BaseballPlayer):
+    pass
+
 
 def test_func():
     player1 = BaseballPlayer('Ethan', 'Drover', 'S', 10, 10)

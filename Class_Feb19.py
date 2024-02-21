@@ -63,8 +63,8 @@ class Movies(Product):
         return self.year
 
     def getDescription(self) -> str:
-        return (f"Name: {self.getName()}\n"
-                f"Discount price: {self.getDiscount()}")
+        return (f"Name: {self.getName()} - {self.description}\n"
+                f"Discount price: {self.getDiscount()}\n")
 
 item1 = Item("Stanley 13 Ounce Wood Hammer", 10, 2, 5, "Hammer")
 movie1 = Movies("The Holy Grail", 20, 1, 5, "DVD", 1975)

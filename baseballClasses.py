@@ -22,7 +22,11 @@ class BaseballPlayer:
             return 0.0
 
 class Lineup(BaseballPlayer):
-    pass
+    yield (f"{BaseballPlayer.first_name} {BaseballPlayer.last_name}")
+    yield (f"{BaseballPlayer.position}")
+    yield (f"{ {BaseballPlayer.at_bats} }")
+    yield (f"{ {BaseballPlayer.hits} }")
+
 
 
 def test_func():

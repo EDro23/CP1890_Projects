@@ -1,4 +1,4 @@
-from baseballClasses import BaseballPlayer
+from baseballClasses import BaseballPlayer,Lineup
 from datetime import datetime
 
 POSITIONS = ('C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'P')
@@ -37,8 +37,6 @@ def add_player(players):
     position = get_player_position()
     at_bats = get_at_bats()
     hits = get_hits(at_bats)
-    # full_name = f'{first_name} {last_name}'
-
     player = BaseballPlayer(first_name, last_name, position, at_bats, hits)
     players.append(player)
     print(f'Player {player.first_name} {player.last_name} was added.')
@@ -251,7 +249,7 @@ def main():
             choice = -1
 
         if choice == 1:
-            display_lineup(players)
+            Lineup(BaseballPlayer)
         elif choice == 2:
             add_player(players)
         elif choice == 3:

@@ -84,8 +84,7 @@ print("Task Description:", homework_task.task_description)
 print("Due Date:", homework_task.due_date)
 print("Subject:", homework_task.subject)
 print("Status:", homework_task.status)
-
-print("\n")
+print()
 
 # Print statements for the meeting.
 
@@ -95,3 +94,4 @@ print("Task Description:", meeting_task.task_description)
 print("Due Date:", meeting_task.due_date)
 print("Location:", meeting_task.location)
 print("Status:", meeting_task.status)
+print()

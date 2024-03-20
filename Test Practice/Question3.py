@@ -25,7 +25,7 @@ class Cat(Animal):
         return f"{parent_sound} Meeeaaoww"
 
 dog = Dog(name="Max", species="Dog", breed="Boxer")
-cat = Cat(name="Buddy", species="Domestic Tabby", color="Orange")
+cat = Cat(name="Buddy", species="Cat", color="Orange")
 
 print("Dog:")
 print(f"Name: {dog.name}")

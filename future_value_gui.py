@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 import locale
 
 locale.setlocale(locale.LC_ALL, '')
@@ -50,7 +50,13 @@ def calculate_button():
         formatted_future_value = locale.format_string("%.2f", future_value, grouping=True)
         future_text.set(f"${formatted_future_value}")  # Add dollar sign
     except ValueError:
-        future_text.set("Invalid Input")
+        messagebox.showwarning("Error", "Don't mess with my program!")
+        response = messagebox.askyesno("Are you sure?", "No input entered, proceed?")
+        if response == True:
+            future_text.set("Enter new data!")
+        else:
+            first_window.destroy()
+
 
 
 calcl_btn = ttk.Button(frame, text="Calculate", command=calculate_button)

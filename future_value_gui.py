@@ -51,9 +51,9 @@ def calculate_button():
         future_text.set(f"${formatted_future_value}")  # Add dollar sign
     except ValueError:
         messagebox.showwarning("Error", "Don't mess with my program!")
-        response = messagebox.askyesno("Are you sure?", "No input entered, proceed?")
+        response = messagebox.askyesno("Are you sure?", "Proceed?")
         if response == True:
-            future_text.set("Enter new data!")
+            future_text.set("Enter new data please!")
         else:
             first_window.destroy()
 

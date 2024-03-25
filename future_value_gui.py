@@ -6,7 +6,7 @@ locale.setlocale(locale.LC_ALL, '')
 
 first_window = tk.Tk()
 first_window.title("Future Value Calculator")
-first_window.geometry("400x175")
+first_window.geometry("425x175")
 
 frame = ttk.Frame(first_window, padding="10 10 10 10")
 frame.pack()
@@ -54,9 +54,9 @@ def calculate_button():
 
 
 calcl_btn = ttk.Button(frame, text="Calculate", command=calculate_button)
-calcl_btn.grid(row=4, column=0, sticky="e", padx=5, pady=5, columnspan=1)  # Set columnspan to span across both columns
+calcl_btn.grid(row=4, column=1, sticky=tk.W, pady=5)  # Set columnspan to span across both columns
 
 button = ttk.Button(frame, text="Exit", command=first_window.destroy)
-button.grid(row=4, column=0, sticky="e", padx=5, pady=5, columnspan=2)  # Set columnspan to span across both columns
+button.grid(row=4, column=1,sticky=tk.E, pady=5)  # Set columnspan to span across both columns
 
 first_window.mainloop()

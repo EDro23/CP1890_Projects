@@ -47,8 +47,8 @@ def calculate_button():
             future_value += monthly_investment
             future_value += ((future_value * (yearly_interest_rate / 12) / 100))
 
-        formatted_future_value = locale.currency(future_value, grouping=True)  # Format with currency symbol and commas
-        future_text.set(formatted_future_value)
+        formatted_future_value = locale.format_string("%.2f", future_value, grouping=True)
+        future_text.set(f"${formatted_future_value}")  # Add dollar sign
     except ValueError:
         future_text.set("Invalid Input")
 

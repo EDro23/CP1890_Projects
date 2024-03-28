@@ -1,7 +1,7 @@
 import sqlite3
 def create_database():
 
-    conn = sqlite3.connect('movies.sqlite')
+    conn = sqlite3.connect('../Programs/movies.sqlite')
 
     c = conn.cursor()
     query = """CREATE TABLE IF NOT EXISTS movies (id INT PRIMARY KEY, name TEXT, year INTEGER, mins INTEGER, category TEXT);"""
@@ -26,7 +26,7 @@ def categories():
 
 
 def add_to_database():
-    conn = sqlite3.connect('movies.db')
+    conn = sqlite3.connect('../Programs/movies.db')
     movie = input(f"Name: ")
     year = input(f"Year: ")
     minutes = input(f"Minutes: ")

@@ -1,4 +1,4 @@
-from store_classes import StoreProducts
+from Programs.store_classes import StoreProducts
 
 def add_product_to_cart():
     while True:

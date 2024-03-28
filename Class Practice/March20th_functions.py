@@ -1,7 +1,7 @@
 import sqlite3
 from March20th_databaseprac import Category, Movie
 
-DB_FILE = 'movies.sqlite'
+DB_FILE = '../Programs/movies.sqlite'
 
 
 def connect():

@@ -2,6 +2,7 @@
 from dataclasses import dataclass
 import sqlite3
 import csv
+from datetime import datetime
 
 
 
@@ -34,8 +35,22 @@ class DailySales:
 
     @classmethod
     def from_db(cls, row):
-        return cls(id=row[0], amount=row[1], date=row[2], region=Region(name=row[3], code=row[4], region=row[5]),
-                   quarter=row[6])
+        if len(row) >= 7:
+            region_data = (row[3], row[4], row[5])
+            region = Region(*region_data)
+        else:
+            region = None
+        return cls(id=row[0], amount=row[1], date=row[2], region=region, quarter=row[6])
+
+    @staticmethod
+    def get_quarter(date_string):
+        if len(date_string) == 4:  # If the date string is just a year
+            return 0  # Set the quarter to 0 or handle it accordingly
+        else:
+            date = datetime.strptime(date_string, '%Y-%m-%d')
+            month = date.month
+            quarter = (month - 1) // 3 + 1
+            return quarter
 
 
 class DB:
@@ -49,13 +64,19 @@ class DB:
         conn.close()
 
     @staticmethod
-    def add_region(region):
+    def get_or_create_region(region_name):
         conn = sqlite3.connect("Sales_data.db")
         cur = conn.cursor()
-        cur.execute('''INSERT INTO Region (code, name, region) VALUES (?, ?, ?)''',
-                    (region.code, region.name, region.region))
-        conn.commit()
+        cur.execute('''SELECT * FROM Region WHERE name = ?''', (region_name,))
+        row = cur.fetchone()
+        if row:
+            region = Region(*row)
+        else:
+            # Insert new region into Region table
+            region = Region(name=region_name)
+            DB.add_region(region)
         conn.close()
+        return region
 
     @staticmethod
     def import_sales_from_csv(csv_file):
@@ -64,9 +85,10 @@ class DB:
             for row in reader:
                 date = row['Date']
                 amount = int(row['Amount'])
-                region = row['Region']
+                region_name = row['Region']
+                region = DB.get_or_create_region(region_name)  # Retrieve or create Region object
                 quarter = int(row['Quarter'])
-                sales = DailySales(amount=amount, date=date, region=Region(name=region))
+                sales = DailySales(amount=amount, date=date, region=region, quarter=quarter)
                 DB.add_sales(sales)
 
     @staticmethod
@@ -74,11 +96,19 @@ class DB:
         conn = sqlite3.connect("Sales_data.db")
         cur = conn.cursor()
         cur.execute('''SELECT Sales.ID, Sales.amount, Sales.salesDate, Region.name as region_name
-                            FROM Sales
-                            JOIN Region ON Sales.region = Region.code
-                            ORDER BY date(Sales.salesDate)''')
+                        FROM Sales
+                        LEFT JOIN Region ON Sales.region = Region.code
+                        ORDER BY date(Sales.salesDate)''')
         rows = cur.fetchall()
-        return [DailySales.from_db(row) for row in rows]
+        sales_list = []
+        for row in rows:
+            if row[3] is not None:  # Check if region data exists and is not None
+                region_data = row[3]
+            else:
+                region_data = "Unknown"  # If region data is missing or None, set it to "Unknown"
+            quarter = DailySales.get_quarter(row[2])  # Calculate quarter based on date
+            sales_list.append(DailySales(id=row[0], amount=row[1], date=row[2], region=region_data, quarter=quarter))
+        return sales_list
 
     @staticmethod
     def add_imported_file(file_name):
@@ -113,14 +143,13 @@ def main():
             print("-" * 55)
             for i, sale in enumerate(sales, start=1):
                 formatted_amount = "${:,.2f}".format(sale.amount)
-                print("{:<1}. {:<12} {:<8} {:<15} {:<15}".format(i, sale.date, sale.quarter, sale.region.name,
+                print("{:<1}. {:<12} {:<8} {:<15} {:<15}".format(i, sale.date, sale.quarter, sale.region,
                                                                  formatted_amount))
             print("-" * 55)
         elif user_input == "add":
             amount = int(input("Enter amount: "))
             date = input("Enter date (YYYY-MM-DD): ")
             region_code = input("Enter region code: ")
-            quarter = int(input("Enter quarter: "))
             sales = DailySales(amount=amount, date=date, region=Region.get_region_from_code(region_code),
                                quarter=quarter)
             DB.add_sales(sales)

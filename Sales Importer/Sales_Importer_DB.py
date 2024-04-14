@@ -55,11 +55,11 @@ class DailySales:
 
 class DB:
     @staticmethod
-    def add_sales(sales):
+    def add_sales(sales, region_code):
         conn = sqlite3.connect("Sales_data.db")
         cur = conn.cursor()
         cur.execute('''INSERT INTO Sales (ID, amount, salesDate, region) VALUES (?, ?, ?, ?)''',
-                    (sales.id, sales.amount, sales.date, sales.region.code))
+                    (sales.id, sales.amount, sales.date, region_code))
         conn.commit()
         conn.close()
 
@@ -85,11 +85,10 @@ class DB:
             for row in reader:
                 date = row['Date']
                 amount = int(row['Amount'])
-                region_name = row['Region']
-                region = DB.get_or_create_region(region_name)  # Retrieve or create Region object
+                region_code = row['Region'][0]  # Extract the first character of the region name
                 quarter = int(row['Quarter'])
-                sales = DailySales(amount=amount, date=date, region=region, quarter=quarter)
-                DB.add_sales(sales)
+                sales = DailySales(amount=amount, date=date)
+                DB.add_sales(sales, region_code)
 
     @staticmethod
     def get_all_sales():
@@ -149,10 +148,9 @@ def main():
         elif user_input == "add":
             amount = int(input("Enter amount: "))
             date = input("Enter date (YYYY-MM-DD): ")
-            region_code = input("Enter region code: ")
-            sales = DailySales(amount=amount, date=date, region=Region.get_region_from_code(region_code),
-                               quarter=quarter)
-            DB.add_sales(sales)
+            region_code = input("Enter region code (E, S, N, W): ")
+            sales = DailySales(amount=amount, date=date)
+            DB.add_sales(sales, region_code)
             print("Sale added successfully.")
         elif user_input == "import":
             file_name = input("Enter CSV file name: ")

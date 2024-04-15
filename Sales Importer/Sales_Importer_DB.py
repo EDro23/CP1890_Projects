@@ -1,19 +1,25 @@
-# Sales data importer program
 from dataclasses import dataclass
 import sqlite3
 import csv
 from datetime import datetime
 
 
-
 @dataclass
 class Region:
+    """
+    Represents a region in Sales Importer.
+    """
     name: str = ""
     code: str = ""
     region: str = ""
 
     @classmethod
     def get_region_from_code(cls, code):
+        """
+        Returns the region associated with a given code
+        :param code:
+        :return: An empty Region object if code is not found
+        """
         conn = sqlite3.connect("Sales_data.db")
         cur = conn.cursor()
         cur.execute('''SELECT * FROM Region WHERE code = ?''', (code,))
@@ -22,11 +28,14 @@ class Region:
         if row:
             return cls(name=row[1], code=row[0], region=row[2])
         else:
-            return cls()  # Return an empty Region object if code is not found
+            return cls()
 
 
 @dataclass
 class DailySales:
+    """
+    Represents a daily sales in Sales Importer.
+    """
     id: int = None
     amount: int = 0
     date: str = ""
@@ -35,6 +44,11 @@ class DailySales:
 
     @classmethod
     def from_db(cls, row):
+        """
+        Creates a new DailySales object from a database row.
+        :param row:
+        :return: returns a new DailySales object.
+        """
         if len(row) >= 7:
             region_data = (row[3], row[4], row[5])
             region = Region(*region_data)
@@ -44,6 +58,11 @@ class DailySales:
 
     @staticmethod
     def get_quarter(date_string):
+        """
+        Returns the quarter for a given date string
+        :param date_string:
+        :return: quarter
+        """
         if len(date_string) == 4:  # If the date string is just a year
             return 0  # Set the quarter to 0 or handle it accordingly
         else:
@@ -54,8 +73,18 @@ class DailySales:
 
 
 class DB:
+    """
+    Represents a database in Sales Importer.
+    """
+
     @staticmethod
     def add_sales(sales, region_code):
+        """
+        Adds a new sales to the database.
+        :param sales: user input sales
+        :param region_code: user input code
+        :return: None
+        """
         conn = sqlite3.connect("Sales_data.db")
         cur = conn.cursor()
         cur.execute('''INSERT INTO Sales (ID, amount, salesDate, region) VALUES (?, ?, ?, ?)''',
@@ -65,6 +94,11 @@ class DB:
 
     @staticmethod
     def get_or_create_region(region_name):
+        """
+        Returns the region associated with a given name.
+        :param region_name:
+        :return: region
+        """
         conn = sqlite3.connect("Sales_data.db")
         cur = conn.cursor()
         cur.execute('''SELECT * FROM Region WHERE name = ?''', (region_name,))
@@ -80,18 +114,32 @@ class DB:
 
     @staticmethod
     def import_sales_from_csv(csv_file):
-        with open(csv_file, 'r', newline='') as csvfile:
-            reader = csv.DictReader(csvfile)
-            for row in reader:
-                date = row['Date']
-                amount = int(row['Amount'])
-                region_code = row['Region'][0]  # Extract the first character of the region name
-                quarter = int(row['Quarter'])
-                sales = DailySales(amount=amount, date=date)
-                DB.add_sales(sales, region_code)
+        """
+        Imports sales from csv file and returns it as a list.
+        :param csv_file:
+        :return: none
+        """
+        try:
+            with open(csv_file, 'r', newline='') as csvfile:
+                reader = csv.DictReader(csvfile)
+                for row in reader:
+                    date = row['Date']
+                    amount = int(row['Amount'])
+                    region_code = row['Region'][0]  # Extract the first character of the region name
+                    quarter = int(row['Quarter'])
+                    sales = DailySales(amount=amount, date=date)
+                    DB.add_sales(sales, region_code)
+            print("Imported sales successfully.")
+        except Exception as e:
+            print("Error:", e)
+            print("Import failed.")
 
     @staticmethod
     def get_all_sales():
+        """
+        Returns all sales in the database
+        :return: sales_list
+        """
         conn = sqlite3.connect("Sales_data.db")
         cur = conn.cursor()
         cur.execute('''SELECT Sales.ID, Sales.amount, Sales.salesDate, Region.name as region_name
@@ -111,6 +159,11 @@ class DB:
 
     @staticmethod
     def add_imported_file(file_name):
+        """
+        Adds a new sales to the database from a CSV file.
+        :param file_name:
+        :return:
+        """
         conn = sqlite3.connect("Sales_data.db")
         cur = conn.cursor()
         cur.execute('''INSERT INTO ImportedFiles (fileName) VALUES (?)''', (file_name,))
@@ -119,8 +172,16 @@ class DB:
 
 
 class Menu:
+    """
+    Represents a menu in Sales Importer.
+    """
+
     @staticmethod
     def menu_contents():
+        """
+        Menu contents for program.
+        :return: Menu contents
+        """
         print("COMMAND MENU")
         print("view - View all sales")
         print("add - Add sales")
@@ -131,6 +192,10 @@ class Menu:
 
 
 def main():
+    """
+    Main function for the program
+    :return:
+    """
     print("SALES DATA IMPORTER")
     print()
     Menu.menu_contents()
@@ -146,17 +211,39 @@ def main():
                                                                  formatted_amount))
             print("-" * 55)
         elif user_input == "add":
-            amount = int(input("Enter amount: "))
-            date = input("Enter date (YYYY-MM-DD): ")
-            region_code = input("Enter region code (E, S, N, W): ")
-            sales = DailySales(amount=amount, date=date)
-            DB.add_sales(sales, region_code)
-            print("Sale added successfully.")
+            while True:
+                try:
+                    amount = int(input("Enter amount: "))
+                    while True:
+                        try:
+                            date = input("Enter date (YYYY-MM-DD): ")
+                            if not date:
+                                raise ValueError("Date cannot be empty.")
+                            datetime.strptime(date, '%Y-%m-%d')  # Validate the date format
+                            break  # If the date format is valid, break out of the loop
+                        except ValueError:
+                            print("Invalid date format. Please enter date in YYYY-MM-DD format.")
+                    while True:
+                        region_code = input("Enter region code (E, S, N, W): ")
+                        if region_code in ['E', 'S', 'N', 'W']:
+                            break
+                        print("Invalid region code. Please enter a valid region code.")
+                    sales = DailySales(amount=amount, date=date)
+                    DB.add_sales(sales, region_code)
+                    print("Sale added successfully.")
+                    break  # Break out of the loop if everything works.
+                except ValueError as e:
+                    print("Error:", e)
+                    print("Please try again.")
         elif user_input == "import":
-            file_name = input("Enter CSV file name: ")
-            DB.import_sales_from_csv(file_name)
-            DB.add_imported_file(file_name)
-            print("Imported sales successfully.")
+            try:
+                file_name = input("Enter CSV file name: ")
+                if not file_name:
+                    raise ValueError("File name cannot be empty.")
+                DB.import_sales_from_csv(file_name)
+                DB.add_imported_file(file_name)
+            except Exception as e:
+                print("Error:", e)
         elif user_input == "menu":
             Menu.menu_contents()
         elif user_input == "exit":

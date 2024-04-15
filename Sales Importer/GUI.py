@@ -56,7 +56,7 @@ class SalesGUI:
         ID = int(self.id_entry.get())
         date = self.date_entry.get()
         region = self.region_entry.get()
-        amount = int(self.amount_entry.get())
+        amount = float(self.amount_entry.get())
 
         # Update the existing entry
         self.cur.execute('''UPDATE Sales SET salesDate = ?, region = ?, amount = ? WHERE ID = ?''',
